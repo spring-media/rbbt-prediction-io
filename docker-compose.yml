@@ -1,0 +1,51 @@
+version: '3'
+services:
+     
+  es:
+    image: elasticsearch:5.5.2
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    environment: 
+      - "ES_JAVA_OPTS=-Xms6g -Xmx6g"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  hbase:
+    image: harisekhon/hbase:1.3
+    ports:
+      - 2181:2181
+      - 8080:8080
+      - 8085:8085
+      - 9090:9090
+      - 9095:9095
+      - 16000:16000
+      - 16010:16010
+      - 16201:16201
+      - 16301:16301
+
+  pio:
+    build:
+      context: ./pio
+    depends_on:
+      - hbase
+      - es
+    ports:
+    - 7070:7070    
+
+  ur:
+    build:
+      context: ./universal-recommender
+    depends_on:
+      - pio
+    ports:
+      - 8000:8000
+    # for debugging
+    entrypoint: ["sh", "-c", "echo 'debug-sleep'; sleep 2073600"]      
+
+volumes:
+  es_data:
