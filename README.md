@@ -2,8 +2,6 @@
 
 Docker container for PredictionIO-based machine learning services
 
-[![Docker build](http://dockeri.co/image/sphereio/predictionio)](https://registry.hub.docker.com/u/sphereio/predictionio/)
-
 [PredictionIO](https://prediction.io) is an open-source Machine Learning
 server for developers and data scientists to build and deploy predictive
 applications in a fraction of the time.
@@ -24,10 +22,10 @@ docker-compose up
 
 starts up the following containers (also see [docker-compose.yml](docker-compose.yml) for `ports`/`networks`/`mounts` used):
 
-- `es` —> Elasticsearch
-- `hbase` -> Hbase and Zookeeper
-- `pio` -> the PredictionIO event server
-- `ur` -> the Universal Recommender
+- `es` ⇢ Elasticsearch
+- `hbase` ⇢ Hbase and Zookeeper
+- `pio` ⇢ the PredictionIO event server
+- `ur` ⇢ the Universal Recommender
 
 Test the `pio` containers health endpoint:
 
@@ -42,7 +40,8 @@ Content-Length: 18
 {"status":"alive"}
 ```
 
-Then ssh into the `ur` container 
+Then ssh into the `ur` container:
+
 ```Bash
 docker exec -it `docker ps | grep predictionio_ur | awk '{print $1}'` bash
 ```
