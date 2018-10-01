@@ -44,4 +44,4 @@ COPY files/pio-env.sh ${PIO_HOME}/conf/pio-env.sh
 
 WORKDIR ${PIO_HOME}
 EXPOSE 7070
-CMD [ "run.sh" ]
+CMD [ "./run.sh" ]
