@@ -35,8 +35,8 @@ services:
       - hbase
       - es
     ports:
-    - 7070:7070    
-
+    - 7070:7070
+    
   ur:
     build:
       context: ./universal-recommender

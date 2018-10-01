@@ -1,0 +1,22 @@
+<configuration>
+     <property>
+        <name>hbase.rootdir</name>
+        <value>hdfs://HBASE_HOST:HBASE_PORT/hbase</value>
+    </property>
+     <property>
+        <name>hbase.cluster.distributed</name>
+        <value>false</value>
+    </property>
+     <property>
+        <name>hbase.zookeeper.property.dataDir</name>
+        <value>hdfs://HBASE_HOST:HBASE_PORT/zookeeper</value>
+    </property>
+     <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>HBASE_HOST</value>
+    </property>
+     <property>
+        <name>hbase.zookeeper.property.clientPort</name>
+        <value>2181</value>
+    </property>
+ </configuration>

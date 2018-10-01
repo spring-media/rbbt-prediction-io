@@ -12,7 +12,6 @@ apt_get_install()
 
 # Update the packace indexes
 apt-get update
-apt_get_install libgfortran3
 apt_get_install ntp
 apt_get_install ntpdate
 
@@ -21,7 +20,6 @@ service ntp stop # Stop ntp daemon to free NTP socket
 sleep 3 # Give the daemon some time to exit
 ntpdate pool.ntp.org # Sync time
 service ntp start # Re-enable the NTP daemon
-
 
 # Configure other system-specific settings ... 
  
@@ -41,4 +39,6 @@ root            hard    nofile          999999
 EOF
 ulimit -n 999999
 
-apt_get_install docker
+apt_get_install docker docker-compose
+
+usermod -aG docker ubuntu

@@ -39,11 +39,9 @@ RUN curl -O http://archive.apache.org/dist/hbase/${HBASE_VERSION}/hbase-${HBASE_
     && rm hbase-${HBASE_VERSION}-bin.tar.gz
 
 COPY files/hbase-site.xml ${PIO_HOME}/vendors/hbase-${HBASE_VERSION}/conf/hbase-site.xml
-
-RUN sed -i "s|VAR_PIO_HOME|${PIO_HOME}|" ${PIO_HOME}/vendors/hbase-${HBASE_VERSION}/conf/hbase-site.xml \
-    && sed -i "s|VAR_HBASE_VERSION|${HBASE_VERSION}|" ${PIO_HOME}/vendors/hbase-${HBASE_VERSION}/conf/hbase-site.xml
-
+COPY files/start.sh ${PIO_HOME}/start.sh
 COPY files/pio-env.sh ${PIO_HOME}/conf/pio-env.sh
 
+WORKDIR ${PIO_HOME}
 EXPOSE 7070
-CMD [ "pio", "eventserver", "--ip", "0.0.0.0", "--port", "7070" ]
+CMD [ "run.sh" ]

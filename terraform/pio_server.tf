@@ -19,14 +19,16 @@ resource "aws_instance" "server" {
   instance_type        = "t2.small"
   key_name             = "production-bootstrap"
   subnet_id            = "${data.aws_cloudformation_stack.vpc.outputs["PrivateAlphaSubnetId"]}"
-  iam_instance_profile = "${aws_iam_instance_profile.emr_profile.id}"
+  iam_instance_profile = "${aws_iam_instance_profile.this.id}"
+  user_data            = "${file("user_data.sh")}"
 
   # sg-1c0f7f7b up-production-ireland-bastion-host 
   security_groups = [
-      "${aws_security_group.allow_all.id}", 
-      "${aws_security_group.es.id}",
-      "${aws_security_group.emr_service.id}"
-      ]
+    "${aws_security_group.allow_all.id}",
+    "${aws_security_group.es.id}",
+    "${module.spark.service_sg_id}",
+    "${module.hbase.service_sg_id}",
+  ]
 
   tags {
     Domain      = "${local.domain_name}"
@@ -37,15 +39,15 @@ resource "aws_instance" "server" {
     Name        = "prediction-io"
   }
 
-  lifecycle {
-      ignore_changes = ["security_groups"]
-  }
+  # lifecycle {
+  #     ignore_changes = ["security_groups"]
+  # }
 }
 
 resource "aws_security_group" "allow_all" {
   name        = "allow_all"
   description = "Allow all inbound traffic"
-  vpc_id      ="${data.aws_cloudformation_stack.vpc.outputs["VpcId"]}"
+  vpc_id      = "${data.aws_cloudformation_stack.vpc.outputs["VpcId"]}"
 
   ingress {
     from_port   = 0
@@ -55,13 +57,13 @@ resource "aws_security_group" "allow_all" {
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags {
-      name = "emr-pio-server-allow-all"
+    name = "emr-pio-server-allow-all"
   }
 }

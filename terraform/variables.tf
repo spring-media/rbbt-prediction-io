@@ -14,9 +14,9 @@ output "es_endpoint" {
 }
 
 output "spark_endpoint" {
-  value = "${aws_emr_cluster.tf-predictionio-spark.master_public_dns}"
+  value = "${module.spark.fqdn}"
 }
 
 output "hbase_endpoint" {
-  value = "${aws_emr_cluster.tf-predictionio-hbase.master_public_dns}"
+  value = "${module.hbase.fqdn}"
 }

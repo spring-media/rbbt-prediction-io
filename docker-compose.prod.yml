@@ -1,0 +1,43 @@
+version: '3'
+services:
+     
+  pio:
+    build:
+      context: ./pio
+    ports:
+      - 7070:7070
+    environment: 
+      - "ES_HOST=vpc-prediction-io-mlilctsisxnuweu5pu3qd36vny.eu-west-1.es.amazonaws.com"
+      - "ES_PORT=443"
+      - "ES_SCHEME=https"
+      
+      - "HBASE_HOST=pio-hbase.internal.welt.de"
+      - "HBASE_PORT=8085"
+      
+      - "HDFS_HOST=pio-hbase.internal.welt.de"
+      - "HDFS_PORT=9000"
+
+  ur:
+    build:
+      context: ./universal-recommender
+    ports:
+      - 8000:8000
+    environment: 
+      - "ES_HOST=vpc-prediction-io-mlilctsisxnuweu5pu3qd36vny.eu-west-1.es.amazonaws.com"
+      - "ES_PORT=443"
+      - "ES_SCHEME=https"
+      
+      - "HBASE_HOST=hbase.internal.welt.de"
+      - "HBASE_PORT=8085"
+      
+      - "HDFS_HOST=hbase.internal.welt.de"
+      - "HDFS_PORT=9000"
+
+      - "SPARK_HOST=todo"
+    # for debugging
+    entrypoint: ["sh", "-c", "echo 'debug-sleep'; sleep 2073600"]      
+    depends_on:
+      - pio
+
+volumes:
+  es_data:

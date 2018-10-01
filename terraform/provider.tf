@@ -12,3 +12,7 @@ terraform {
     dynamodb_table = "terraform-lock-table"
   }
 }
+
+data "aws_cloudformation_stack" "vpc" {
+  name = "up-production-ireland-vpc"
+}
