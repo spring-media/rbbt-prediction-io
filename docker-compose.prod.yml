@@ -27,10 +27,10 @@ services:
       - "ES_PORT=443"
       - "ES_SCHEME=https"
       
-      - "HBASE_HOST=hbase.internal.welt.de"
+      - "HBASE_HOST=pio-hbase.internal.welt.de"
       - "HBASE_PORT=8085"
       
-      - "HDFS_HOST=hbase.internal.welt.de"
+      - "HDFS_HOST=pio-hbase.internal.welt.de"
       - "HDFS_PORT=9000"
 
       - "SPARK_HOST=todo"
