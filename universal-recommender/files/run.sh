@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
+source ./conf/pio-env.sh
+
+find ./vendors -name "hbase-site.xml" -exec sed -i "s|HBASE_HOST|${HBASE_HOST}|g;s|HBASE_PORT|${HBASE_PORT}|g" {} \;
+
 PIO_APP_NAME="welt_pio"
 
 pushd ~/ur
