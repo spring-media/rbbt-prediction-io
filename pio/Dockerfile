@@ -39,7 +39,7 @@ RUN curl -O http://archive.apache.org/dist/hbase/${HBASE_VERSION}/hbase-${HBASE_
     && rm hbase-${HBASE_VERSION}-bin.tar.gz
 
 COPY files/hbase-site.xml ${PIO_HOME}/vendors/hbase-${HBASE_VERSION}/conf/hbase-site.xml
-COPY files/start.sh ${PIO_HOME}/run.sh
+COPY files/run.sh ${PIO_HOME}/run.sh
 COPY files/pio-env.sh ${PIO_HOME}/conf/pio-env.sh
 
 WORKDIR ${PIO_HOME}
