@@ -11,13 +11,14 @@ pushd ~/ur
 
 sed -i "s|VAR_APP_NAME|$PIO_APP_NAME|;s|VAR_ES_HOST|$ES_HOST|;s|VAR_ES_PORT|$ES_PORT|" engine.json
 if [ "$ES_SCHEME" == "https" ]; then
-    sed '/sparkConf/ a\
+    sed -i '/sparkConf/ a\
     "es.net.ssl": "true", "es.nodes.wan.only": "true", ' engine.json
 fi
 
-# still in debug mode
-echo 'debug-sleep'
-sleep 2073600
+if [ "$MODE" == "DEBUG" ]; then
+    echo 'debug-sleep'
+    sleep 2073600
+fi
 
 pio status
 pio app new $PIO_APP_NAME || true
