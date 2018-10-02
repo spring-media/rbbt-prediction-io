@@ -3,6 +3,10 @@ locals {
   storage_gb     = 10
   instance_type  = "t2.small.elasticsearch"
   instance_count = 1
+
+  region = "eu-west-1"
+
+  environment= "production"
 }
 
 output "server_instance_id" {

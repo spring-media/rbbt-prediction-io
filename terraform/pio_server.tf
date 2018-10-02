@@ -39,9 +39,9 @@ resource "aws_instance" "server" {
     Name        = "prediction-io"
   }
 
-  # lifecycle {
-  #     ignore_changes = ["security_groups"]
-  # }
+  lifecycle {
+      ignore_changes = ["security_groups"]
+  }
 }
 
 resource "aws_security_group" "allow_all" {
@@ -67,3 +67,4 @@ resource "aws_security_group" "allow_all" {
     name = "emr-pio-server-allow-all"
   }
 }
+
