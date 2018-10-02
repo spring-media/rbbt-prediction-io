@@ -16,7 +16,8 @@
         "spark.kryo.referenceTracking": "false",
         "spark.kryoserializer.buffer": "300m",
         "es.index.auto.create": "true",
-        "es.nodes": "es"
+        "es.nodes": "VAR_ES_HOST",
+        "es.port": "VAR_ES_PORT"
     },
     "algorithms": [{
         "comment": "simplest setup where all values are default, popularity based backfill, must add eventsNames",

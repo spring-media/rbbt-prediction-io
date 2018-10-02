@@ -35,7 +35,6 @@ services:
 
       - "SPARK_HOST=todo"
     # for debugging
-    entrypoint: ["sh", "-c", "echo 'debug-sleep'; sleep 2073600"]      
     depends_on:
       - pio
 

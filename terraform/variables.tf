@@ -13,9 +13,9 @@ output "es_endpoint" {
   value = "${aws_elasticsearch_domain.default.endpoint}"
 }
 
-output "spark_endpoint" {
-  value = "${module.spark.fqdn}"
-}
+# output "spark_endpoint" {
+#   value = "${module.spark.fqdn}"
+# }
 
 output "hbase_endpoint" {
   value = "${module.hbase.fqdn}"

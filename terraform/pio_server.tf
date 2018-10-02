@@ -26,7 +26,7 @@ resource "aws_instance" "server" {
   security_groups = [
     "${aws_security_group.allow_all.id}",
     "${aws_security_group.es.id}",
-    "${module.spark.service_sg_id}",
+    # "${module.spark.service_sg_id}",
     "${module.hbase.service_sg_id}",
   ]
 
