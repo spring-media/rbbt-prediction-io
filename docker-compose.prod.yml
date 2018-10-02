@@ -33,8 +33,6 @@ services:
       - "HDFS_HOST=pio-hbase.internal.welt.de"
       - "HDFS_PORT=9000"
 
-      - "SPARK_HOST=todo"
-    # for debugging
     depends_on:
       - pio
 
