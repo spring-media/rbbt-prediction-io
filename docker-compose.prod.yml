@@ -33,7 +33,7 @@ services:
       - "HDFS_HOST=pio-hbase.internal.welt.de"
       - "HDFS_PORT=9000"
 
-      # - "DEBUG=true"
+      - "DEBUG=false"
     depends_on:
       - pio
 

@@ -15,7 +15,7 @@ if [ "$ES_SCHEME" == "https" ]; then
     "es.net.ssl": "true", "es.nodes.wan.only": "true", ' engine.json
 fi
 
-if [ "$MODE" == "DEBUG" ]; then
+if [ "$DEBUG" == "true" ]; then
     echo 'debug-sleep'
     sleep 2073600
 fi
