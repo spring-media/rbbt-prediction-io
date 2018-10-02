@@ -37,5 +37,11 @@ services:
     depends_on:
       - pio
 
+  importer:
+    image: 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:latest
+    environment:
+      - "MODE=production"
+    command: "2018-10-01T00:00:00Z 2018-10-02T00:00:00Z"
+
 volumes:
   es_data:

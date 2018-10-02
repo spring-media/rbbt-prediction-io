@@ -3,9 +3,8 @@ module "hbase" {
 
   service_name     = "hbase"
   applications     = ["Hadoop", "HBase", "ZooKeeper"]
-  vpc_id           = "${data.aws_cloudformation_stack.vpc.outputs["VpcId"]}"
-  subnet_id        = "${data.aws_cloudformation_stack.vpc.outputs["PrivateAlphaSubnetId"]}"
-  instance_profile = "${aws_iam_instance_profile.this.arn}"
+  vpc_id           = "${local.vpc_id}"
+  subnet_id        = "${local.subnet_id}"
 }
 
 # aws emr spark on yarn is not compatible with pio — once we need more computing power,

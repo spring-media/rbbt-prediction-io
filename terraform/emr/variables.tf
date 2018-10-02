@@ -7,9 +7,6 @@ variable "applications" {
 variable "vpc_id" {}
 variable "subnet_id" {}
 
-variable "instance_profile" {}
-
-
 variable "master_instance_type" {
   default = "m4.large"
 }
@@ -33,4 +30,3 @@ output "fqdn" {
 output "service_sg_id" {
   value = "${aws_security_group.service.id}"
 }
-

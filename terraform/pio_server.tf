@@ -18,15 +18,14 @@ resource "aws_instance" "server" {
   ami                  = "${data.aws_ami.ubuntu.id}"
   instance_type        = "t2.small"
   key_name             = "production-bootstrap"
-  subnet_id            = "${data.aws_cloudformation_stack.vpc.outputs["PrivateAlphaSubnetId"]}"
-  iam_instance_profile = "${aws_iam_instance_profile.this.id}"
+  subnet_id            = "${local.subnet_id}"
+  iam_instance_profile = "${local.vpc_instance_security_group}"
   user_data            = "${file("user_data.sh")}"
 
   # sg-1c0f7f7b up-production-ireland-bastion-host 
   security_groups = [
     "${aws_security_group.allow_all.id}",
-    "${aws_security_group.es.id}",
-    # "${module.spark.service_sg_id}",
+    "${aws_security_group.es.id}",    
     "${module.hbase.service_sg_id}",
   ]
 
@@ -47,7 +46,7 @@ resource "aws_instance" "server" {
 resource "aws_security_group" "allow_all" {
   name        = "allow_all"
   description = "Allow all inbound traffic"
-  vpc_id      = "${data.aws_cloudformation_stack.vpc.outputs["VpcId"]}"
+  vpc_id      = "${local.vpc_id}"
 
   ingress {
     from_port   = 0

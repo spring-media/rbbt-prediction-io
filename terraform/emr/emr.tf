@@ -8,7 +8,7 @@ resource "aws_emr_cluster" "this" {
 
     emr_managed_master_security_group = "${aws_security_group.master.id}"
     emr_managed_slave_security_group  = "${aws_security_group.slave.id}"
-    instance_profile                  = "${var.instance_profile}"
+    instance_profile                  = "${aws_iam_instance_profile.this.arn}"
     key_name                          = "production-bootstrap"
     service_access_security_group     = "${aws_security_group.service.id}"
   }
@@ -139,8 +139,18 @@ resource "aws_iam_role" "this" {
 EOF
 }
 
-# Default policy for the Amazon Elastic MapReduce service role.
-resource "aws_iam_role_policy_attachment" "this" {
+resource "aws_iam_instance_profile" "this" {
+  name = "emr_profile"
+  role = "${aws_iam_role.this.name}"
+}# Default policy for the Amazon Elastic MapReduce service role.
+
+resource "aws_iam_role_policy_attachment" "AmazonElasticMapReduceRole" {
   role       = "${aws_iam_role.this.id}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole"
+}
+
+# Default policy for the Amazon Elastic MapReduce for EC2 service role.
+resource "aws_iam_role_policy_attachment" "AmazonElasticMapReduceforEC2Role" {
+  role       = "${aws_iam_role.this.id}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceforEC2Role"
 }
