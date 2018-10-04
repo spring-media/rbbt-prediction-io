@@ -22,4 +22,9 @@ data "aws_cloudformation_stack" "vpc" {
   name = "up-production-ireland-vpc"
 }
 
+data "aws_cloudformation_stack" "environment" {
+  name = "up-production-ireland-environment"
+}
+
 data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}

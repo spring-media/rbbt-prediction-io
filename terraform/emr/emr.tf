@@ -8,7 +8,7 @@ resource "aws_emr_cluster" "this" {
 
     emr_managed_master_security_group = "${aws_security_group.master.id}"
     emr_managed_slave_security_group  = "${aws_security_group.slave.id}"
-    instance_profile                  = "${var.instance_profile}"
+    instance_profile                  = "${aws_iam_instance_profile.emr_profile.arn}"
     key_name                          = "production-bootstrap"
     service_access_security_group     = "${aws_security_group.service.id}"
   }
@@ -30,7 +30,7 @@ resource "aws_emr_cluster" "this" {
     args = ["instance.isMaster=true", "echo running on master node"]
   }
 
-  service_role = "${aws_iam_role.this.arn}"
+  service_role = "${aws_iam_role.iam_emr_service_role.arn}"
 }
 
 resource "aws_route53_record" "this" {
@@ -119,7 +119,7 @@ resource "aws_security_group" "service" {
 ###
 
 # IAM role for EMR Service
-resource "aws_iam_role" "this" {
+resource "aws_iam_role" "iam_emr_service_role" {
   name = "tf-emr-pio-${var.service_name}-role"
 
   assume_role_policy = <<EOF
@@ -138,9 +138,41 @@ resource "aws_iam_role" "this" {
 }
 EOF
 }
+resource "aws_iam_role_policy_attachment" "AmazonElasticMapReduceRole" {
+  role       = "${aws_iam_role.iam_emr_service_role.id}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole"
+}
+
+
+# IAM Role for EC2 Instance Profile
+resource "aws_iam_role" "iam_emr_profile_role" {
+  name = "iam_emr_profile_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+resource "aws_iam_instance_profile" "emr_profile" {
+  name = "emr_profile"
+  role = "${aws_iam_role.iam_emr_profile_role.name}"
+}
 
 # Default policy for the Amazon Elastic MapReduce service role.
-resource "aws_iam_role_policy_attachment" "this" {
-  role       = "${aws_iam_role.this.id}"
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole"
+
+# Default policy for the Amazon Elastic MapReduce for EC2 service role.
+resource "aws_iam_role_policy_attachment" "AmazonElasticMapReduceforEC2Role" {
+  role       = "${aws_iam_role.iam_emr_profile_role.id}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceforEC2Role"
 }

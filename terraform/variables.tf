@@ -1,11 +1,12 @@
 locals {
-  domain_name                 = "prediction-io"
-  storage_gb                  = 10
-  instance_type               = "t2.small.elasticsearch"
-  instance_count              = 1
-  vpc_id                      = "${data.aws_cloudformation_stack.vpc.outputs["VpcId"]}"
-  subnet_id                   = "${data.aws_cloudformation_stack.vpc.outputs["PrivateAlphaSubnetId"]}"
-  vpc_instance_security_group = "${data.aws_cloudformation_stack.vpc.outputs["VpcInstanceSecurityGroup"]}"
+  domain_name          = "prediction-io"
+  storage_gb           = 10
+  instance_type        = "t2.small.elasticsearch"
+  instance_count       = 1
+  vpc_id               = "${data.aws_cloudformation_stack.vpc.outputs["VpcId"]}"
+  subnet_id            = "${data.aws_cloudformation_stack.vpc.outputs["PrivateAlphaSubnetId"]}"
+  region               = "${data.aws_region.current.name}"
+  environment          = "production"
 }
 
 output "server_instance_id" {

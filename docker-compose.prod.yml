@@ -2,8 +2,7 @@ version: '3'
 services:
      
   pio:
-    build:
-      context: ./pio
+    image: 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:ur-latest
     ports:
       - 7070:7070
     environment: 
@@ -18,8 +17,7 @@ services:
       - "HDFS_PORT=9000"
 
   ur:
-    build:
-      context: ./universal-recommender
+    image: 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:ur-latest
     ports:
       - 8000:8000
     environment: 
@@ -33,10 +31,5 @@ services:
       - "HDFS_HOST=pio-hbase.internal.welt.de"
       - "HDFS_PORT=9000"
 
-      - "SPARK_HOST=todo"
-    # for debugging
     depends_on:
       - pio
-
-volumes:
-  es_data:

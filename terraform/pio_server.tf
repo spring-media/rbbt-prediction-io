@@ -18,8 +18,8 @@ resource "aws_instance" "server" {
   ami                  = "${data.aws_ami.ubuntu.id}"
   instance_type        = "t2.small"
   key_name             = "production-bootstrap"
-  subnet_id            = "${data.aws_cloudformation_stack.vpc.outputs["PrivateAlphaSubnetId"]}"
-  iam_instance_profile = "${aws_iam_instance_profile.this.id}"
+  subnet_id            = "${local.subnet_id}"
+  iam_instance_profile = "${aws_iam_role.this.id}"
   user_data            = "${file("user_data.sh")}"
 
   # sg-1c0f7f7b up-production-ireland-bastion-host 
@@ -28,6 +28,8 @@ resource "aws_instance" "server" {
     "${aws_security_group.es.id}",
     # "${module.spark.service_sg_id}",
     "${module.hbase.service_sg_id}",
+    "${data.aws_cloudformation_stack.environment.outputs["InstanceSecurityGroup"]}",
+    "${data.aws_cloudformation_stack.vpc.outputs["VpcInstanceSecurityGroup"]}"
   ]
 
   tags {
@@ -68,3 +70,33 @@ resource "aws_security_group" "allow_all" {
   }
 }
 
+resource "aws_iam_role" "this" {
+  name = "iam_pio_profile_role"
+   assume_role_policy = <<EOF
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+ resource "aws_iam_instance_profile" "this" {
+  name = "pio_profile"
+  role = "${aws_iam_role.this.name}"
+}
+
+# Default policy for the Amazon Elastic MapReduce service role.
+resource "aws_iam_role_policy_attachment" "this" {
+  role       = "${aws_iam_role.this.id}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+# todo -> kms,ssm
