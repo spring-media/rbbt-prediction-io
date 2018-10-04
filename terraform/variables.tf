@@ -10,10 +10,6 @@ locals {
   environment          = "production"
 }
 
-output "server_instance_id" {
-  value = "${aws_instance.server.id}"
-}
-
 output "es_endpoint" {
   value = "${aws_elasticsearch_domain.default.endpoint}"
 }

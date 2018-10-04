@@ -14,15 +14,16 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_instance" "server" {
-  ami                  = "${data.aws_ami.ubuntu.id}"
-  instance_type        = "t2.small"
-  key_name             = "production-bootstrap"
-  subnet_id            = "${local.subnet_id}"
-  iam_instance_profile = "${aws_iam_instance_profile.this.id}"
-  user_data            = "${file("user_data.sh")}"
 
-  # sg-1c0f7f7b up-production-ireland-bastion-host 
+resource "aws_launch_configuration" "pio" {
+  name_prefix                 = "tf-pio"
+  image_id                    = "${data.aws_ami.ubuntu.id}"
+  instance_type               = "t2.small"
+  user_data                   =  "${file("user_data.sh")}"
+  key_name                    = "production-bootstrap"
+  associate_public_ip_address = false
+  iam_instance_profile        = "${aws_iam_instance_profile.this.id}"
+
   security_groups = [
     "${aws_security_group.allow_all.id}",
     "${aws_security_group.es.id}",
@@ -32,17 +33,72 @@ resource "aws_instance" "server" {
     "${data.aws_cloudformation_stack.vpc.outputs["VpcInstanceSecurityGroup"]}"
   ]
 
-  tags {
-    Domain      = "${local.domain_name}"
-    Service     = "pio-${local.domain_name}"
-    Team        = "up"
-    Environment = "production"
-    Component   = "${local.domain_name}"
-    Name        = "prediction-io"
+  lifecycle {
+    create_before_destroy = true
   }
 
-  lifecycle {
-      ignore_changes = ["security_groups"]
+}
+
+resource "aws_autoscaling_group" "pio" {
+  name                      = "pio"
+  desired_capacity          = 1
+  max_size                  = 1
+  min_size                  = 1
+  health_check_grace_period = 300
+  health_check_type         = "ELB"
+  force_delete              = true
+  launch_configuration      = "${aws_launch_configuration.pio.name}"
+  default_cooldown          = 30
+
+  termination_policies = [
+    "OldestInstance",
+    "OldestLaunchConfiguration",
+  ]
+
+  target_group_arns = [
+    "${aws_alb_target_group.internal_alb_target_group_ur.arn}",
+  ]
+
+  vpc_zone_identifier = [
+    "${data.aws_cloudformation_stack.vpc.outputs["PrivateAlphaSubnetId"]}",
+    "${data.aws_cloudformation_stack.vpc.outputs["PrivateBetaSubnetId"]}",
+    "${data.aws_cloudformation_stack.vpc.outputs["PrivateGammaSubnetId"]}",
+  ]
+
+  tag {
+    key                 = "Name"
+    value               = "Pio"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "component"
+    value               = "pio"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "team"
+    value               = "up"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "environment"
+    value               = "production"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "managed_by"
+    value               = "terraform"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "service"
+    value               = "pio"
+    propagate_at_launch = true
   }
 }
 
