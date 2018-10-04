@@ -6,6 +6,7 @@ locals {
   vpc_id               = "${data.aws_cloudformation_stack.vpc.outputs["VpcId"]}"
   subnet_id            = "${data.aws_cloudformation_stack.vpc.outputs["PrivateAlphaSubnetId"]}"
   region               = "${data.aws_region.current.name}"
+  account_id           = "${data.aws_caller_identity.current.account_id}"
   environment          = "production"
 }
 

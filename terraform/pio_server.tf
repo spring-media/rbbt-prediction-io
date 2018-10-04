@@ -19,7 +19,7 @@ resource "aws_instance" "server" {
   instance_type        = "t2.small"
   key_name             = "production-bootstrap"
   subnet_id            = "${local.subnet_id}"
-  iam_instance_profile = "${aws_iam_role.this.id}"
+  iam_instance_profile = "${aws_iam_instance_profile.this.id}"
   user_data            = "${file("user_data.sh")}"
 
   # sg-1c0f7f7b up-production-ireland-bastion-host 
@@ -93,10 +93,36 @@ EOF
   role = "${aws_iam_role.this.name}"
 }
 
-# Default policy for the Amazon Elastic MapReduce service role.
-resource "aws_iam_role_policy_attachment" "this" {
-  role       = "${aws_iam_role.this.id}"
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+data "aws_iam_policy_document" "pio_server" {
+  "statement" {
+    actions   = ["ssm:GetParametersByPath"]
+    resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/service/frank/*"]
+  }
+  "statement" {
+    actions   = ["ssm:GetParametersByPath"]
+    resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/service/piwik/*"]
+  }
+  "statement" {
+    actions   = ["ssm:GetParametersByPath"]
+    resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/service/pio/rds/*"]
+  }
+  statement {
+    actions = ["kms:Decrypt"]
+    resources = ["arn:aws:kms:${local.region}:${local.account_id}:key/915d158f-48a1-4ad9-8705-a4ed812295e4"]
+  }
+  statement {
+    actions = ["ecr:*"]
+    resources = ["${aws_ecr_repository.repo.arn}"]
+  }
 }
 
-# todo -> kms,ssm
+resource "aws_iam_policy" "pio_server" {
+  name   = "pio_server_policy"
+  path   = "/"
+  policy = "${data.aws_iam_policy_document.pio_server.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_attachment" {
+  role       = "${aws_iam_role.this.id}"
+  policy_arn = "${aws_iam_policy.pio_server.arn}"
+}

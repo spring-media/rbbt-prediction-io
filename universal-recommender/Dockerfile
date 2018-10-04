@@ -1,4 +1,4 @@
-FROM pio:es-latest
+FROM pio:pio-latest
 
 RUN apt-get update \
     && apt-get install -y --auto-remove --no-install-recommends python3-setuptools python3-pip git-core vim \
