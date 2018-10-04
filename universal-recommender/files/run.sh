@@ -6,13 +6,14 @@ source ./conf/pio-env.sh
 find ./vendors -name "hbase-site.xml" -exec sed -i "s|HBASE_HOST|$HBASE_HOST|;s|HBASE_PORT|$HBASE_PORT|" {} \;
 
 PIO_APP_NAME="welt_pio"
-
+PIO_TRAINING_ARGS=""
 pushd ~/ur
 
 sed -i "s|VAR_APP_NAME|$PIO_APP_NAME|;s|VAR_ES_HOST|$ES_HOST|;s|VAR_ES_PORT|$ES_PORT|" engine.json
 if [ "$ES_SCHEME" == "https" ]; then
-    sed '/sparkConf/ a\
-    "es.net.ssl": "true", "es.nodes.wan.only": "true", ' engine.json
+    sed -i '/sparkConf/ a\
+    "es.net.ssl": "true", ' engine.json
+    PIO_TRAINING_ARGS="spark.es.nodes.wan.only=true""
 fi
 
 # still in debug mode
@@ -23,6 +24,6 @@ pio status
 pio app new $PIO_APP_NAME || true
 pio app show $PIO_APP_NAME
 pio build --clean
-pio train -- --driver-memory 4g --executor-memory 4g
+pio train -- --driver-memory 4g --executor-memory 4g --conf spark.es.nodes.wan.only=true $PIO_TRAINING_ARGS
 
 pio deploy --event-server-ip pio

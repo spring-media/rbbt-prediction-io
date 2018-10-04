@@ -152,15 +152,15 @@ EOF
 data "aws_iam_policy_document" "pio_server" {
   "statement" {
     actions   = ["ssm:GetParametersByPath"]
-    resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/service/frank/*"]
+    resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/service/frank/"]
   }
   "statement" {
     actions   = ["ssm:GetParametersByPath"]
-    resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/service/piwik/*"]
+    resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/service/piwik/rds/"]
   }
   "statement" {
     actions   = ["ssm:GetParametersByPath"]
-    resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/service/pio/rds/*"]
+    resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/service/pio/"]
   }
   statement {
     actions = ["kms:Decrypt"]
@@ -169,6 +169,10 @@ data "aws_iam_policy_document" "pio_server" {
   statement {
     actions = ["ecr:*"]
     resources = ["${aws_ecr_repository.repo.arn}"]
+  }
+  statement {
+    actions = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
   }
 }
 

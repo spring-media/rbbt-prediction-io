@@ -43,10 +43,22 @@ Content-Length: 18
 Then ssh into the `ur` container:
 
 ```Bash
-docker exec -it `docker ps | grep predictionio_ur | awk '{print $1}'` bash
+docker exec -it `docker ps | grep _ur | awk '{print $1}'` bash
 ```
 
 The Universal Recommender will available at `~/ur`; for starters run the [integration tests](http://actionml.com/docs/ur_quickstart):
+
+_Hint_: You may need to adapt the URL of the `pio` server and enable the elasticsearch wan in `examples/integration-test`:
+
+    python3 examples/import_handmade.py --access_key $ACCESS_KEY --file data/sample-handmade-data.txt --url http://pio:7070
+    ...
+    pio train  -- --driver-memory 4g --executor-memory 4g --conf spark.es.nodes.wan.only=true
+
+_Hint_: You may need to adapt the `examples/handmade-engine.json`; set `es.net.ssl` to `true` only if you're connecting through HTTPS:
+
+        "es.nodes": "vpc-prediction-io-mlilctsisxnuweu5pu3qd36vny.eu-west-1.es.amazonaws.com",
+        "es.port": "443",
+        "es.net.ssl": "true"
 
 ```Bash
 cd ~/ur
