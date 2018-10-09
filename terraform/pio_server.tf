@@ -44,8 +44,9 @@ resource "aws_autoscaling_group" "pio" {
   desired_capacity          = 1
   max_size                  = 1
   min_size                  = 1
-  health_check_grace_period = 300
+  health_check_grace_period = 900
   health_check_type         = "ELB"
+  
   force_delete              = true
   launch_configuration      = "${aws_launch_configuration.pio.name}"
   default_cooldown          = 30

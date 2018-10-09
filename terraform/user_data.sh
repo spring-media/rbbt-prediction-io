@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euox pipefail
+set -x
 
 # Debian apt-get install function to eliminate prompts
 export DEBIAN_FRONTEND=noninteractive
