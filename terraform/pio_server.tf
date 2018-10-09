@@ -1,9 +1,14 @@
-data "aws_ami" "ubuntu" {
+data "aws_ami" "ec2_ami" {
   most_recent = true
 
   filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
   }
 
   filter {
@@ -11,13 +16,29 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 
-  owners = ["099720109477"] # Canonical
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+
+  filter {
+    name   = "image-type"
+    values = ["machine"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  name_regex = "^amzn-ami-hvm-[\\d\\.]+-x86_64-gp2"
+  owners     = ["amazon"]
 }
 
 
 resource "aws_launch_configuration" "pio" {
   name_prefix                 = "tf-pio"
-  image_id                    = "${data.aws_ami.ubuntu.id}"
+  image_id                    = "${data.aws_ami.ec2_ami.id}"
   instance_type               = "t2.large"
   user_data                   =  "${file("user_data.sh")}"
   key_name                    = "production-bootstrap"
@@ -46,7 +67,7 @@ resource "aws_autoscaling_group" "pio" {
   min_size                  = 1
   health_check_grace_period = 900
   health_check_type         = "ELB"
-  
+
   force_delete              = true
   launch_configuration      = "${aws_launch_configuration.pio.name}"
   default_cooldown          = 30
