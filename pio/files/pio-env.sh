@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
+SPARK_HOME=${PIO_HOME}/vendors/spark-${SPARK_VERSION}-bin-hadoop2.7
+HBASE_CONF_DIR=${PIO_HOME}/vendors/hbase-${HBASE_VERSION}/conf
+HADOOP_CONF_DIR=/etc/hadoop
+
 # Filesystem paths where PredictionIO uses as block storage.
 PIO_FS_BASEDIR=${HOME}/.pio_store
 PIO_FS_ENGINESDIR=${PIO_FS_BASEDIR}/engines
 PIO_FS_TMPDIR=${PIO_FS_BASEDIR}/tmp
-
-SPARK_HOME=${PIO_HOME}/vendors/spark-${SPARK_VERSION}-bin-hadoop2.7
-HBASE_CONF_DIR=${PIO_HOME}/vendors/hbase-${HBASE_VERSION}/conf
 
 # Storage Repositories
 PIO_STORAGE_REPOSITORIES_METADATA_NAME=pio_meta
@@ -33,8 +34,8 @@ PIO_STORAGE_SOURCES_ELASTICSEARCH_HOME=${PIO_HOME}/vendors/elasticsearch-${ELAST
 # model storage, required to be in hdfs but not really used
 
 PIO_STORAGE_SOURCES_HDFS_TYPE=hdfs
-# PIO_STORAGE_SOURCES_HDFS_PATH=hdfs://${HDFS_HOST:=hbase}:${HDFS_PORT:=9000}/models
-PIO_STORAGE_SOURCES_HDFS_HOSTS=${HDFS_HOST:=hbase}
+# PIO_STORAGE_SOURCES_HDFS_HOSTS=${HDFS_HOST:=hbase}
+PIO_STORAGE_SOURCES_HDFS_PATH=hdfs://${HDFS_HOST:=hbase}:${HDFS_PORT:=9000}/models
 
 # HBASE config
 

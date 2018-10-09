@@ -14,4 +14,4 @@ COPY files/run.sh /root/run.sh
 RUN chmod a+x /root/run.sh
 
 EXPOSE 8000
-CMD [ "/root/run.sh" ]
+CMD [ "./run.sh" ]

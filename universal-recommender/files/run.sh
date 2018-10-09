@@ -1,9 +1,20 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-source ./conf/pio-env.sh
+function train {
+    echo "Training engine."    
+    pio train -- --driver-memory 4g --executor-memory 4g $PIO_TRAINING_ARGS
+}
 
-find ./vendors -name "hbase-site.xml" -exec sed -i "s|HBASE_HOST|$HBASE_HOST|;s|HBASE_PORT|$HBASE_PORT|" {} \;
+function deploy {
+    echo "Deploying engine."
+    pio deploy --event-server-ip pio
+}
+
+source $PIO_HOME/conf/pio-env.sh
+
+sed -i "s|HBASE_HOST|${HBASE_HOST}|g;s|HBASE_PORT|${HBASE_PORT}|g" $HBASE_CONF_DIR/hbase-site.xml
+sed -i "s|HDFS_HOST|${HDFS_HOST}|g;s|HDFS_PORT|${HDFS_PORT}|g" $HADOOP_CONF_DIR/core-site.xml
 
 PIO_APP_NAME="welt_pio"
 PIO_TRAINING_ARGS=""
@@ -16,14 +27,23 @@ if [ "$ES_SCHEME" == "https" ]; then
     PIO_TRAINING_ARGS="--conf spark.es.nodes.wan.only=true"
 fi
 
-# still in debug mode
-# echo 'debug-sleep'
-# sleep 2073600
-
 pio status
 pio app new $PIO_APP_NAME || true
 pio app show $PIO_APP_NAME
 pio build --clean
-pio train -- --driver-memory 4g --executor-memory 4g $PIO_TRAINING_ARGS
 
-pio deploy --event-server-ip pio
+echo "RUN_MODE == $RUN_MODE"
+case $RUN_MODE in
+    "TRAIN_ONLY")
+        train
+        echo "TRAIN_ONLY -> Finished. Exiting now."
+        exit 0
+        ;;
+    "DEPLOY_ONLY")
+        deploy
+        ;;
+    *)
+        train
+        deploy
+        ;;
+esac
