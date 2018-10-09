@@ -2,6 +2,7 @@
 set -x
 
 yum --assumeyes install git docker
+service docker start
 
 [[ -e /home/ubuntu/prediction-io ]] || git clone https://github.com/spring-media/rbbt-prediction-io.git /home/ubuntu/prediction-io
 chown -R ubuntu:ubuntu /home/ubuntu
