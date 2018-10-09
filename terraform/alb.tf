@@ -8,8 +8,8 @@ resource "aws_alb_target_group" "internal_alb_target_group_ur" {
   health_check {
     path                = "/"
     protocol            = "HTTP"
-    timeout             = "15"
-    interval            = "30"
+    timeout             = "60"
+    interval            = "120"
     healthy_threshold   = "2"
     unhealthy_threshold = "8"
     port                = "8000"
