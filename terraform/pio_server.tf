@@ -18,7 +18,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_launch_configuration" "pio" {
   name_prefix                 = "tf-pio"
   image_id                    = "${data.aws_ami.ubuntu.id}"
-  instance_type               = "t2.small"
+  instance_type               = "t2.large"
   user_data                   =  "${file("user_data.sh")}"
   key_name                    = "production-bootstrap"
   associate_public_ip_address = false
