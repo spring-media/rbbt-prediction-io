@@ -14,7 +14,7 @@ services:
       - "HBASE_PORT=8085"
       
       - "HDFS_HOST=pio-hbase.internal.welt.de"
-      - "HDFS_PORT=9000"
+      - "HDFS_PORT=8020"
 
   ur:
     image: 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:ur-latest
