@@ -12,6 +12,7 @@ COPY files/engine.json /root/ur/engine.json
 COPY files/run.sh /root/run.sh
 
 RUN chmod a+x /root/run.sh
+WORKDIR /root
 
 EXPOSE 8000
 CMD [ "./run.sh" ]

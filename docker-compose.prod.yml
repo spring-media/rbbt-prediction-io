@@ -29,8 +29,8 @@ services:
       - "HBASE_PORT=8085"
       
       - "HDFS_HOST=pio-hbase.internal.welt.de"
-      - "HDFS_PORT=9000"
-      
+      - "HDFS_PORT=8020"
+
       - "RUN_MODE=DEPLOY_ONLY"
 
     depends_on:
