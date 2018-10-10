@@ -30,7 +30,6 @@ fi
 pio status
 pio app new $PIO_APP_NAME || true
 pio app show $PIO_APP_NAME
-pio build --clean
 
 echo "RUN_MODE == $RUN_MODE"
 case $RUN_MODE in

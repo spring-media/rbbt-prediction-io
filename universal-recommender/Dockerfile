@@ -7,7 +7,7 @@ RUN apt-get update \
     && pip3 install predictionio datetime
 
 RUN git clone https://github.com/actionml/universal-recommender.git /root/ur
-
+RUN cd /root/ur && pio build --clean
 COPY files/engine.json /root/ur/engine.json
 COPY files/run.sh /root/run.sh
 
