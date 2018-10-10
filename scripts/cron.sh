@@ -1,3 +1,4 @@
+eval $(aws ecr get-login --region eu-west-1 --no-include-email)
 docker run --detach 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:latest 2018-09-29T00:00:00Z 2018-10-09T00:00:00Z
 # this is derived from the docker-compose env
 cat <<EOF > .env
@@ -9,5 +10,5 @@ HBASE_PORT=8085
 HDFS_HOST=pio-hbase.internal.welt.de
 HDFS_PORT=8020
 EOF
-docker run --env-file .env --dns 10.0.8.2 --env RUN_MODE=TRAIN_ONLY --rm -it 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:ur-latest bash
+docker run --env-file .env --dns 10.0.8.2 --env RUN_MODE=TRAIN_ONLY --rm 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:ur-latest
 cd /opt/prediction-io/ && docker-compose restart ur
