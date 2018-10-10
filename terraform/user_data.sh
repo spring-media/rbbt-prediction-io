@@ -10,6 +10,6 @@ echo 'PATH=$PATH:/usr/local/bin' >> ~/.bashrc
 
 usermod -aG docker ec2-user
 
-[[ -e ~/prediction-io ]] || git clone https://github.com/spring-media/rbbt-prediction-io.git ~/prediction-io
+[[ -e /opt/prediction-io ]] || git clone https://github.com/spring-media/rbbt-prediction-io.git /opt/prediction-io
 eval $(aws ecr get-login --region eu-west-1 --no-include-email)
-docker-compose --file ~/prediction-io/docker-compose.prod.yml up --build
+docker-compose --file /opt/prediction-io/docker-compose.prod.yml up --build
