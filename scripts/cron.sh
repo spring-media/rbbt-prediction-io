@@ -10,4 +10,4 @@ HDFS_HOST=pio-hbase.internal.welt.de
 HDFS_PORT=8020
 EOF
 docker run --env-file .env --dns 10.0.8.2 --env RUN_MODE=TRAIN_ONLY --rm -it 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:ur-latest bash
-docker-compose restart ur
+cd /opt/prediction-io/ && docker-compose restart ur
