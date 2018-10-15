@@ -15,7 +15,7 @@ usermod -aG docker ec2-user
 
 chown ec2-user:ec2-user /opt/prediction-io/scripts/cron.sh
 chmod +x /opt/prediction-io/scripts/cron.sh
-echo "* * * 2 * /opt/prediction-io/scripts/cron.sh" > mycron
+echo "* */2 * * * /opt/prediction-io/scripts/cron.sh" > mycron
 crontab -u ec2-user mycron
 rm -f mycron
 
