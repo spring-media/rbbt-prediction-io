@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+lockfile -r 0 /tmp/pio_cron_sh.lock || exit 1
+
 eval $(aws ecr get-login --region eu-west-1 --no-include-email)
 docker pull 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:importer-latest
 docker run 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:importer-latest `date -d "2 hours ago" "+%Y-%m-%dT%H:%M:%S"Z` `date "+%Y-%m-%dT%H:%M:%S"Z`
@@ -13,4 +17,6 @@ HDFS_PORT=8020
 EOF
 docker run --env-file .env --dns 10.0.8.2 --env RUN_MODE=TRAIN_ONLY --rm 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:ur-latest
 
-cd /opt/prediction-io/ && docker-compose restart ur
+cd /opt/prediction-io/ && docker-compose restart 
+
+rm -f /tmp/pio_cron_sh.lock
