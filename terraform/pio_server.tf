@@ -39,11 +39,17 @@ data "aws_ami" "ec2_ami" {
 resource "aws_launch_configuration" "pio" {
   name_prefix                 = "tf-pio"
   image_id                    = "${data.aws_ami.ec2_ami.id}"
-  instance_type               = "t2.large"
+  instance_type               = "m5.xlarge"
   user_data                   =  "${file("user_data.sh")}"
   key_name                    = "production-bootstrap"
   associate_public_ip_address = false
   iam_instance_profile        = "${aws_iam_instance_profile.this.id}"
+
+  root_block_device {
+    volume_size = "40"
+    volume_type = "gp2"
+    delete_on_termination = true
+  }
 
   security_groups = [
     "${aws_security_group.allow_all.id}",
@@ -183,6 +189,10 @@ data "aws_iam_policy_document" "pio_server" {
   "statement" {
     actions   = ["ssm:GetParametersByPath"]
     resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/service/pio/"]
+  }
+  "statement" {
+    actions   = ["ssm:GetParametersByPath"]
+    resources = ["arn:aws:ssm:${local.region}:${local.account_id}:parameter/slack/up-status/"]
   }
   statement {
     actions = ["kms:Decrypt"]
