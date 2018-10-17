@@ -17,6 +17,6 @@ HDFS_PORT=8020
 EOF
 docker run --rm --env-file .env --dns 10.0.8.2 --env RUN_MODE=TRAIN_ONLY --rm 933782373565.dkr.ecr.eu-west-1.amazonaws.com/pio:ur-latest
 
-cd /opt/prediction-io/ && /usr/local/bin/docker-compose restart 
+cd /opt/prediction-io/ && /usr/local/bin/docker-compose restart ur
 
 rm -f /tmp/pio_cron_sh.lock
