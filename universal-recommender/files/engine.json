@@ -22,6 +22,12 @@
     "algorithms": [{
         "comment": "simplest setup where all values are default, popularity based backfill, must add eventsNames",
         "name": "ur",
+        "eventNames": ["view"],
+        "eventWindow": {
+            "duration": "60 days",
+            "removeDuplicates": true,
+            "compressProperties": true
+        },
         "params": {
             "appName": "VAR_APP_NAME",
             "indexName": "urindex",
@@ -29,6 +35,7 @@
             "comment": "must have data for the first event or the model will not build, other events are optional",
             "eventNames": ["view"]
         },
+        "maxQueryEvents": 250,
         "dateName": "published_date"
     }]
 }
