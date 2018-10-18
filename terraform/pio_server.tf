@@ -85,6 +85,7 @@ resource "aws_autoscaling_group" "pio" {
 
   target_group_arns = [
     "${aws_alb_target_group.internal_alb_target_group_ur.arn}",
+    "${aws_alb_target_group.internal_alb_target_group_es.arn}",
   ]
 
   vpc_zone_identifier = [
