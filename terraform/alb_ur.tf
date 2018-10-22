@@ -39,7 +39,7 @@ resource "aws_alb_listener_rule" "internal_alb_listener_rule_ur" {
     field = "host-header"
 
     values = [
-      "${aws_route53_record.internal_alb_dns_alias.fqdn}",
+      "${aws_route53_record.ur_internal.fqdn}",
     ]
   }
 }
