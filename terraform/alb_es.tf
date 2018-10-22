@@ -61,5 +61,5 @@ resource "aws_route53_record" "es_external" {
   type    = "CNAME"
   zone_id = "Z2Y0RY5OG39VAR"
   ttl     = "60"
-   records        = ["ecs-proxy-ecs-infrastructure.up.welt.de"]
+  records = ["ecs-proxy-ecs-infrastructure.up.welt.de"]
 }
