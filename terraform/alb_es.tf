@@ -44,7 +44,7 @@ resource "aws_alb_listener_rule" "internal_alb_listener_rule_es" {
   }
 }
 
-resource "aws_route53_record" "internal_alb_dns_alias_es" {
+resource "aws_route53_record" "es_internal" {
   name    = "pio-es"
   type    = "A"
   zone_id = "Z17GPKRT9COZ3L"
@@ -56,7 +56,7 @@ resource "aws_route53_record" "internal_alb_dns_alias_es" {
   }
 }
 
-resource "aws_route53_record" "external_alb_dns_alias_es" {
+resource "aws_route53_record" "es_external" {
   name    = "pio-es"
   type    = "CNAME"
   zone_id = "Z2Y0RY5OG39VAR"

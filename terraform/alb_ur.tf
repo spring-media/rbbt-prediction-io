@@ -44,7 +44,7 @@ resource "aws_alb_listener_rule" "internal_alb_listener_rule_ur" {
   }
 }
 
-resource "aws_route53_record" "internal_alb_dns_alias" {
+resource "aws_route53_record" "ur_internal" {
   name    = "pio-ur"
   type    = "A"
   zone_id = "Z17GPKRT9COZ3L"
@@ -54,4 +54,12 @@ resource "aws_route53_record" "internal_alb_dns_alias" {
     name                   = "${data.terraform_remote_state.alb.internal_alb_dns_name}"
     zone_id                = "${data.terraform_remote_state.alb.internal_hosted_zone_id}"
   }
+}
+
+resource "aws_route53_record" "ur_external" {
+  name    = "pio-ur"
+  type    = "CNAME"
+  zone_id = "Z2Y0RY5OG39VAR"
+  ttl     = "60"
+   records        = ["ecs-proxy-ecs-infrastructure.up.welt.de"]
 }
