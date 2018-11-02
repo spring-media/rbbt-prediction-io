@@ -36,6 +36,8 @@
             "eventNames": ["view"]
         },
         "maxQueryEvents": 250,
-        "dateName": "published_date"
+        "dateName": "published_date",
+        "availableDateName": "published_date",
+        "expireDateName": "expire_date"
     }]
 }
