@@ -10,7 +10,8 @@ echo 'PATH=$PATH:/usr/local/bin' >> ~/.bashrc
 
 usermod -aG docker ec2-user
 
-[[ -e /opt/prediction-io ]] || git clone https://github.com/spring-media/rbbt-prediction-io.git /opt/prediction-io
+[[ -e /opt/prediction-io ]] || git clone https://github.com/spring-media/rbbt-prediction-io.git /opt/prediction-io 
+chown -R ec2-user:ec2-user /opt/prediction-io
 
 # run cron every 2 hours
 (echo "0 */2 * * * /opt/prediction-io/scripts/cron.sh") | crontab -u ec2-user -
