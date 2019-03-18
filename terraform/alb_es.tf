@@ -1,5 +1,5 @@
 resource "aws_alb_target_group" "internal_alb_target_group_es" {
-  name                 = "pio-es-${local.environment}"
+  name                 = "pio-es-poc"
   port                 = "7070"
   protocol             = "HTTP"
   vpc_id               = "${data.aws_cloudformation_stack.vpc.outputs["VpcId"]}"
@@ -16,11 +16,11 @@ resource "aws_alb_target_group" "internal_alb_target_group_es" {
   }
 
   tags {
-    Name        = "pio-es-${local.environment}-alb"
+    Name        = "pio-es-poc-alb"
     service     = "pio"
     component   = "pio"
     application = "pio"
-    environment = "${local.environment}"
+    environment = "poc"
     team        = "up"
     managed_by  = "terraform"
   }
