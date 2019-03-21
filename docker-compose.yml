@@ -18,8 +18,10 @@ services:
   hbase:
     image: harisekhon/hbase:1.3
     ports:
+      # zookeeper
       - 2181:2181
       - 8080:8080
+      # hbase
       - 8085:8085
       - 9090:9090
       - 9095:9095
@@ -29,8 +31,7 @@ services:
       - 16301:16301
 
   pio:
-    build:
-      context: ./pio
+    image: pio:pio-latest
     depends_on:
       - hbase
       - es
@@ -38,8 +39,7 @@ services:
     - 7070:7070
     
   ur:
-    build:
-      context: ./universal-recommender
+    image: pio:ur-latest
     depends_on:
       - pio
     ports:
